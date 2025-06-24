@@ -28,10 +28,8 @@ const fetchProducts = async (filters) => {
 function ProductsTable({ filters, onFiltersChange }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  // Локальное состояние для модального окна фильтров, чтобы не менять глобальные фильтры сразу
   const [localFilters, setLocalFilters] = useState(filters)
 
-  // Синхронизация локальных фильтров при открытии/закрытии или изменении глобальных
   useEffect(() => {
     if (isOpen) {
       setLocalFilters(filters)
@@ -46,14 +44,12 @@ function ProductsTable({ filters, onFiltersChange }) {
 
   const [sortMenuOpen, setSortMenuOpen] = useState(false)
 
-  // Подгружаем данные с фильтрами из пропсов
   const { data = [], isLoading, error, refetch } = useQuery({
     queryKey: ["products", filters],
     queryFn: () => fetchProducts(filters),
     keepPreviousData: true,
   })
 
-  // Сбрасываем страницу на 1 при изменении фильтров
   useEffect(() => {
     setCurrentPage(1)
   }, [filters])
@@ -63,7 +59,6 @@ function ProductsTable({ filters, onFiltersChange }) {
     return item[field]
   }
 
-  // Сортировка по клику
   const handleSortButtonClick = () => {
     setSortMenuOpen(prev => !prev)
   }
@@ -84,7 +79,6 @@ function ProductsTable({ filters, onFiltersChange }) {
       let aVal = fieldValue(a, sortField)
       let bVal = fieldValue(b, sortField)
 
-      // Приводим числовые поля к числу
       if (["discount_price", "price", "rating", "feedback_count"].includes(sortField)) {
         aVal = Number(aVal)
         bVal = Number(bVal)
@@ -114,7 +108,6 @@ function ProductsTable({ filters, onFiltersChange }) {
   const STEP = 500
   const MIN = 0
 
-  // Максимальная цена для слайдера — либо из фильтров, либо из данных, либо 100000
   const maxPriceFromData = useMemo(() => {
     if (!data.length) return 100000
     return Math.max(...data.map(p => p.price))
@@ -341,7 +334,6 @@ function ProductsTable({ filters, onFiltersChange }) {
               onClick={() => {
                 onFiltersChange(localFilters)
                 onClose()
-                // refetch() не нужен, react-query перезапустит запрос с новыми filters
               }}
             >
               Применить

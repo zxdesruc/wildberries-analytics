@@ -11,16 +11,12 @@ USER_AGENTS = [
 ]
 
 def parse_wildberries(query: str, limit=100, delay=1.0):
-    """
-    Парсит товары Wildberries по запросу. Ограничение — limit товаров.
-    Добавляет задержку delay (в секундах) между запросами.
-    """
 
     print(f"[WB PARSER] Запрос: {query} | Лимит: {limit} | Задержка: {delay}s")
 
     saved_count = 0
     page = 1
-    per_page = 100  # максимум товаров с одной страницы
+    per_page = 100 
 
     while saved_count < limit:
         try:
@@ -68,7 +64,6 @@ def parse_wildberries(query: str, limit=100, delay=1.0):
                 )
 
                 if not created:
-                    # обновим, если что-то поменялось
                     obj.price = price
                     obj.discount_price = discount_price
                     obj.rating = rating
@@ -78,7 +73,7 @@ def parse_wildberries(query: str, limit=100, delay=1.0):
                 saved_count += 1
 
             page += 1
-            time.sleep(delay)  # задержка между запросами
+            time.sleep(delay)
 
         except Exception as e:
             print(f"[WB PARSER] ⚠️ Ошибка на странице {page}: {e}")

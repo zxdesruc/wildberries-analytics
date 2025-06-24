@@ -10,7 +10,6 @@ import { useQuery } from '@tanstack/react-query'
 
 const API_URL = 'http://localhost:8000/api/products/'
 
-// Функция загрузки продуктов с фильтрами
 const fetchProducts = async (filters) => {
   const params = new URLSearchParams()
   if (filters.minPrice !== undefined) params.append('min_price', filters.minPrice)
@@ -23,7 +22,6 @@ const fetchProducts = async (filters) => {
   return res.json()
 }
 
-// Кастомный тултип для гистограммы
 const CustomBarTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload
@@ -37,7 +35,6 @@ const CustomBarTooltip = ({ active, payload }) => {
   return null
 }
 
-// Кастомный тултип для линейного графика
 const CustomLineTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload
@@ -62,10 +59,8 @@ function ProductsCharts({ filters }) {
   if (error) return <Box color="red.500">Ошибка загрузки графиков</Box>
   if (!data || data.length === 0) return <Box>Нет данных для отображения</Box>
 
-  // Диапазоны цен для гистограммы (можно адаптировать под твои данные)
   const priceBuckets = [0, 1000, 3000, 5000, 10000, 20000, 50000]
 
-  // Формируем данные для гистограммы: диапазон цены и количество товаров в этом диапазоне
   const priceDistribution = priceBuckets.slice(0, -1).map((start, i) => {
     const end = priceBuckets[i + 1]
     return {
@@ -74,11 +69,10 @@ function ProductsCharts({ filters }) {
     }
   })
 
-  // Для линейного графика: фильтруем товары со скидкой и отображаем рейтинг и размер скидки
   const discountData = data
     .filter(p => p.price > p.discount_price)
     .map(p => ({
-      rating: Number(p.rating.toFixed(1)), // округляем рейтинг для лучшей читаемости
+      rating: Number(p.rating.toFixed(1)),
       discount: p.price - p.discount_price,
     }))
 
