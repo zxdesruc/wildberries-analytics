@@ -2,11 +2,15 @@
 установка:
 
 git clone https://github.com/zxdesruc/wildberries-analytics.git
+
 cd wildberries-analytics
 
 python3 -m venv venv
+
 source venv/bin/activate
+
 pip3 install -r requirements.txt
+
 
 sudo -u postgres psql
 --------------------
