@@ -48,6 +48,7 @@ npm run dev
 python3 manage.py shell
 
 from products.parser import parse_wildberries
+
 parse_wildberries("пауэрбанк", limit=50, delay=1.5)
 
 
